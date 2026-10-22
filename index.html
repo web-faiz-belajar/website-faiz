@@ -1,110 +1,388 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tebak Angka Game</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  background:
-    radial-gradient(circle at top left, #312e81, transparent 45%),
-    radial-gradient(circle at bottom right, #164e63, transparent 45%),
-    #020617;
-  font-family:Arial,sans-serif;
-  color:#fff;}
-.card{width:100%;max-width:420px;background:#ffffff12;border:1px solid #ffffff25;border-radius:24px;padding:26px;text-align:center;box-shadow:0 20px 60px #0005}
-.tag{color:#a5b4fc;font-size:13px;letter-spacing:2px;font-weight:bold}
-h1{font-size:30px;margin:12px 0}
-p{color:#dbeafe;line-height:1.5}
-input{width:100%;padding:15px;border-radius:12px;border:1px solid #64748b;background:#0f172a;color:white;font-size:20px;text-align:center;margin:12px 0}
-button{width:100%;border:0;border-radius:12px;padding:14px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:8px}
-#guessBtn{background:linear-gradient(135deg,#6366f1,#a855f7);
-color:#ffffff;
-border:1px solid #c4b5fd;
-box-shadow:0 0 18px #818cf866;}
-#restartBtn{background:linear-gradient(135deg,#1e293b,#312e81);
-color:white;
-border:1px solid #818cf866;
-box-shadow:0 0 12px #6366f122;}
-#message{min-height:48px;font-weight:bold;margin-top:16px;padding:12px;border-radius:12px;background:#818cf810;text-shadow:0 0 10px #818cf8;transition:all 0.3s ease;}
-.stats{display:flex;gap:10px;margin-top:18px;}
-.stat{flex:1;background:linear-gradient(145deg,#0f172add,#312e8144);border:1px solid #818cf833;border-radius:14px;padding:12px;box-shadow:0 0 12px #6366f111;}
-.stat strong{display:block;font-size:22px;margin-top:5px;color:#c4b5fd;text-shadow:0 0 10px #818cf866;}
-.small{font-size:12px;color:#cbd5e1;}
-#guessBtn,
-#restartBtn{transition: all 0.2s ease;cursor: pointer;}
-#guessBtn:active,
-#restartBtn:active{transform: scale(0.96);} 
-</style>
-</head>
-<body>
-<main class="card">
-  <div class="tag">MINI WEB GAME</div>
-  <h1>🎯 Tebak Angka</h1>
-  <p class="creator">Dibuat oleh Muhammad Al Faiz</p>
-  <p>Aku memilih angka dari 1 sampai 100. Bisakah kamu menebaknya?</p>
-  <form id="gameForm">
-    <input id="guess" type="number" min="1" max="100" placeholder="Masukkan angka..." required>
-    <button id="guessBtn" type="submit">TEBAK SEKARANG</button>
-  </form>
-  <div id="message" role="status">Ayo mulai bermain!</div>
-  <div class="stats">
-    <div class="stat"><span class="small">Percobaan</span><strong id="attempts">0</strong></div>
-    <div class="stat"><span class="small">Skor</span><strong id="score">100</strong></div>
-  </div>
-  <button id="restartBtn" type="button">🔄 Main Lagi</button>
-  <p class="small">Dibuat dengan HTML, CSS, dan JavaScript</p>
-</main>
-<script>
-let secret, attempts, finished;
-const form = document.getElementById('gameForm');
-const input = document.getElementById('guess');
-const message = document.getElementById('message');
-const attemptsEl = document.getElementById('attempts');
-const scoreEl = document.getElementById('score');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#020617">
+  <title>Game Tebak Angka</title>
 
-function newGame(){
-  secret = Math.floor(Math.random()*100)+1;
-  attempts = 0;
-  finished = false;
-  attemptsEl.textContent = '0';
-  scoreEl.textContent = '100';
-  message.textContent = 'Angka baru sudah dipilih. Semangat!';
-  input.value = '';
-  input.disabled = false;
-  document.getElementById('guessBtn').disabled = false;
-}
-form.addEventListener('submit', function(e){
-  e.preventDefault();
-  if(finished) return;
-  const guess = Number(input.value);
-  if(!Number.isInteger(guess) || guess < 1 || guess > 100){
-    message.textContent = 'Masukkan angka bulat dari 1 sampai 100.';
-    return;
-  }
-  attempts++;
-  attemptsEl.textContent = attempts;
-  scoreEl.textContent = Math.max(0,100-(attempts-1)*10);
-  if(guess === secret){
-    message.textContent = '🎉 Benar! Kamu berhasil menebak angka ' + secret + '!';
-    finished = true;
-    input.disabled = true;
-    document.getElementById('guessBtn').disabled = true;
-  }else if(guess < secret){
-    message.textContent = '📈 Terlalu kecil! Coba angka yang lebih besar.';
-  }else{
-    message.textContent = '📉 Terlalu besar! Coba angka yang lebih kecil.';
-  }
-  if(!finished) input.select();
-});
-document.getElementById('restartBtn').addEventListener('click',newGame);
-newGame();
-</script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      color: #f8fafc;
+      background: linear-gradient(
+        135deg,
+        #312e81 0%,
+        #164e63 50%,
+        #020617 100%
+      );
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      padding: 28px 22px;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .icon {
+      font-size: 52px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .creator {
+      color: #67e8f9;
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    .description {
+      color: #cbd5e1;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 14px 8px;
+      border-radius: 12px;
+    }
+
+    .stat-label {
+      color: #94a3b8;
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .stat-value {
+      font-size: 23px;
+      font-weight: bold;
+      color: #67e8f9;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #475569;
+      border-radius: 12px;
+      background: #0f172a;
+      color: white;
+      font-size: 20px;
+      text-align: center;
+      outline: none;
+      margin-bottom: 12px;
+    }
+
+    input:focus {
+      border-color: #38bdf8;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s, filter 0.15s;
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #guessBtn {
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      color: #08111f;
+      margin-bottom: 10px;
+    }
+
+    #restartBtn {
+      color: white;
+      background: #334155;
+      margin-top: 12px;
+    }
+
+    #message {
+      min-height: 55px;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #1e293b;
+      color: #e2e8f0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .success {
+      color: #86efac !important;
+    }
+
+    .error {
+      color: #fca5a5 !important;
+    }
+
+    .history {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .history h2 {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    #historyList {
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .footer {
+      margin-top: 20px;
+      color: #94a3b8;
+      font-size: 11px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <div class="icon">🎯</div>
+
+    <h1>Tebak Angka</h1>
+    <div class="creator">Dibuat oleh Muhammad Al Faiz</div>
+
+    <p class="description">
+      Aku memilih angka rahasia dari 1 sampai 100.
+      Bisakah kamu menebaknya dalam 7 kesempatan?
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Kesempatan tersisa</div>
+        <div class="stat-value" id="chances">7</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Skor saat ini</div>
+        <div class="stat-value" id="score">0</div>
+      </div>
+    </div>
+
+    <form id="guessForm">
+      <input
+        id="guessInput"
+        type="number"
+        min="1"
+        max="100"
+        placeholder="Masukkan angka..."
+        inputmode="numeric"
+        required
+        autocomplete="off"
+        aria-label="Tebakan angka 1 sampai 100"
+      >
+
+      <button id="guessBtn" type="submit">
+        TEBAK SEKARANG
+      </button>
+    </form>
+
+    <div id="message" role="status" aria-live="polite">
+      Ayo mulai! Masukkan angka 1–100.
+    </div>
+
+    <button id="restartBtn" type="button">
+      🔄 MAIN LAGI
+    </button>
+
+    <section class="history">
+      <h2>📋 Riwayat tebakan</h2>
+      <div id="historyList">Belum ada tebakan.</div>
+    </section>
+
+    <div class="footer">
+      Game Tebak Angka • HTML, CSS &amp; JavaScript
+    </div>
+  </main>
+
+  <script>
+    "use strict";
+
+    const MAX_CHANCES = 7;
+    const MIN_NUMBER = 1;
+    const MAX_NUMBER = 100;
+
+    let secretNumber;
+    let chances;
+    let score;
+    let gameOver;
+    let history;
+
+    const form = document.getElementById("guessForm");
+    const input = document.getElementById("guessInput");
+    const guessBtn = document.getElementById("guessBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const message = document.getElementById("message");
+    const chancesDisplay = document.getElementById("chances");
+    const scoreDisplay = document.getElementById("score");
+    const historyList = document.getElementById("historyList");
+
+    function startGame() {
+      secretNumber = Math.floor(
+        Math.random() * (MAX_NUMBER - MIN_NUMBER + 1)
+      ) + MIN_NUMBER;
+
+      chances = MAX_CHANCES;
+      score = 0;
+      gameOver = false;
+      history = [];
+
+      chancesDisplay.textContent = chances;
+      scoreDisplay.textContent = score;
+
+      input.value = "";
+      input.disabled = false;
+      guessBtn.disabled = false;
+      guessBtn.textContent = "TEBAK SEKARANG";
+
+      message.textContent =
+        "Ayo mulai! Masukkan angka 1–100.";
+      message.className = "";
+
+      historyList.textContent = "Belum ada tebakan.";
+
+      input.focus();
+    }
+
+    function showMessage(text, type = "") {
+      message.textContent = text;
+      message.className = type;
+    }
+
+    function updateHistory() {
+      if (history.length === 0) {
+        historyList.textContent = "Belum ada tebakan.";
+        return;
+      }
+
+      historyList.textContent = history
+        .map((item, index) => `${index + 1}. ${item}`)
+        .join("\n");
+    }
+
+    function finishGame(won) {
+      gameOver = true;
+      input.disabled = true;
+      guessBtn.disabled = true;
+
+      if (won) {
+        showMessage(
+          `🎉 BENAR! Angka rahasianya ${secretNumber}. Kamu menang!`,
+          "success"
+        );
+      } else {
+        showMessage(
+          `Kesempatan habis! Angka yang benar adalah ${secretNumber}.`,
+          "error"
+        );
+      }
+    }
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      if (gameOver) return;
+
+      const guess = Number(input.value);
+
+      if (
+        input.value.trim() === "" ||
+        !Number.isInteger(guess) ||
+        guess < MIN_NUMBER ||
+        guess > MAX_NUMBER
+      ) {
+        showMessage("Masukkan bilangan bulat dari 1 sampai 100.", "error");
+        input.focus();
+        return;
+      }
+
+      chances--;
+
+      if (guess === secretNumber) {
+        score = chances * 10 + 10;
+        history.push(`${guess} — BENAR!`);
+        scoreDisplay.textContent = score;
+        chancesDisplay.textContent = chances;
+        updateHistory();
+        finishGame(true);
+        return;
+      }
+
+      if (guess < secretNumber) {
+        history.push(`${guess} — terlalu kecil`);
+      } else {
+        history.push(`${guess} — terlalu besar`);
+      }
+
+      chancesDisplay.textContent = chances;
+      updateHistory();
+
+      if (chances === 0) {
+        finishGame(false);
+        return;
+      }
+
+      showMessage(
+        guess < secretNumber
+          ? "📈 Terlalu kecil! Coba angka yang lebih besar."
+          : "📉 Terlalu besar! Coba angka yang lebih kecil."
+      );
+
+      input.value = "";
+      input.focus();
+    });
+
+    restartBtn.addEventListener("click", startGame);
+
+    startGame();
+  </script>
 </body>
 </html>
