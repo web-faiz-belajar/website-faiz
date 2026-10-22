@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tebak Angka Game</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(135deg,#0f172a,#312e81);font-family:Arial,sans-serif;color:#fff}
+.card{width:100%;max-width:420px;background:#ffffff12;border:1px solid #ffffff25;border-radius:24px;padding:26px;text-align:center;box-shadow:0 20px 60px #0005}
+.tag{color:#a5b4fc;font-size:13px;letter-spacing:2px;font-weight:bold}
+h1{font-size:30px;margin:12px 0}
+p{color:#dbeafe;line-height:1.5}
+input{width:100%;padding:15px;border-radius:12px;border:1px solid #64748b;background:#0f172a;color:white;font-size:20px;text-align:center;margin:12px 0}
+button{width:100%;border:0;border-radius:12px;padding:14px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:8px}
+#guessBtn{background:#818cf8;color:#111827}
+#restartBtn{background:#ffffff18;color:white;border:1px solid #ffffff30}
+#message{min-height:48px;font-weight:bold;margin-top:16px}
+.stats{display:flex;gap:10px;margin-top:18px}
+.stat{flex:1;background:#0f172a70;border-radius:12px;padding:12px}
+.stat strong{display:block;font-size:22px;margin-top:5px}
+.small{font-size:12px;color:#cbd5e1}
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="tag">MINI WEB GAME</div>
+  <h1>🎯 Tebak Angka</h1>
+  <p>Aku memilih angka dari 1 sampai 100. Bisakah kamu menebaknya?</p>
+  <form id="gameForm">
+    <input id="guess" type="number" min="1" max="100" placeholder="Masukkan angka..." required>
+    <button id="guessBtn" type="submit">TEBAK SEKARANG</button>
+  </form>
+  <div id="message" role="status">Ayo mulai bermain!</div>
+  <div class="stats">
+    <div class="stat"><span class="small">Percobaan</span><strong id="attempts">0</strong></div>
+    <div class="stat"><span class="small">Skor</span><strong id="score">100</strong></div>
+  </div>
+  <button id="restartBtn" type="button">🔄 Main Lagi</button>
+  <p class="small">Dibuat dengan HTML, CSS, dan JavaScript</p>
+</main>
+<script>
+let secret, attempts, finished;
+const form = document.getElementById('gameForm');
+const input = document.getElementById('guess');
+const message = document.getElementById('message');
+const attemptsEl = document.getElementById('attempts');
+const scoreEl = document.getElementById('score');
+
+function newGame(){
+  secret = Math.floor(Math.random()*100)+1;
+  attempts = 0;
+  finished = false;
+  attemptsEl.textContent = '0';
+  scoreEl.textContent = '100';
+  message.textContent = 'Angka baru sudah dipilih. Semangat!';
+  input.value = '';
+  input.disabled = false;
+  document.getElementById('guessBtn').disabled = false;
+}
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  if(finished) return;
+  const guess = Number(input.value);
+  if(!Number.isInteger(guess) || guess < 1 || guess > 100){
+    message.textContent = 'Masukkan angka bulat dari 1 sampai 100.';
+    return;
+  }
+  attempts++;
+  attemptsEl.textContent = attempts;
+  scoreEl.textContent = Math.max(0,100-(attempts-1)*10);
+  if(guess === secret){
+    message.textContent = '🎉 Benar! Kamu berhasil menebak angka ' + secret + '!';
+    finished = true;
+    input.disabled = true;
+    document.getElementById('guessBtn').disabled = true;
+  }else if(guess < secret){
+    message.textContent = '📈 Terlalu kecil! Coba angka yang lebih besar.';
+  }else{
+    message.textContent = '📉 Terlalu besar! Coba angka yang lebih kecil.';
+  }
+  if(!finished) input.select();
+});
+document.getElementById('restartBtn').addEventListener('click',newGame);
+newGame();
+</script>
+</body>
+</html>
