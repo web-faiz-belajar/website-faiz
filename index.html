@@ -24,13 +24,49 @@ h1{font-size:30px;margin:12px 0}
 p{color:#dbeafe;line-height:1.5}
 input{width:100%;padding:15px;border-radius:12px;border:1px solid #64748b;background:#0f172a;color:white;font-size:20px;text-align:center;margin:12px 0}
 button{width:100%;border:0;border-radius:12px;padding:14px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:8px}
-#guessBtn{background:#818cf8;color:#111827}
-#restartBtn{background:#ffffff18;color:white;border:1px solid #ffffff30}
-#message{min-height:48px;font-weight:bold;margin-top:16px}
-.stats{display:flex;gap:10px;margin-top:18px}
-.stat{flex:1;background:#0f172a70;border-radius:12px;padding:12px}
-.stat strong{display:block;font-size:22px;margin-top:5px}
-.small{font-size:12px;color:#cbd5e1}
+#guessBtn{background:linear-gradient(135deg,#6366f1,#a855f7);
+color:#ffffff;
+border:1px solid #c4b5fd;
+box-shadow:0 0 18px #818cf866;}
+#restartBtn{background:linear-gradient(135deg,#1e293b,#312e81);
+color:white;
+border:1px solid #818cf866;
+box-shadow:0 0 12px #6366f122;}
+#message{min-height:48px;
+  font-weight:bold;
+  margin-top:16px;
+  padding:12px;
+  border-radius:12px;
+  background:#818cf810;
+  text-shadow:0 0 10px #818cf8;
+  transition:all 0.3s ease;}
+.stats{
+  display:flex;
+  gap:10px;
+  margin-top:18px;}
+.stat{
+  flex:1;
+  background:linear-gradient(145deg,#0f172add,#312e8144);
+  border:1px solid #818cf833;
+  border-radius:14px;
+  padding:12px;
+  box-shadow:0 0 12px #6366f111;}
+.stat strong{
+  display:block;
+  font-size:22px;
+  margin-top:5px;
+  color:#c4b5fd;
+  text-shadow:0 0 10px #818cf866;}
+.small{
+  font-size:12px;
+  color:#cbd5e1;}
+#guessBtn,
+#restartBtn {
+  transition: all 0.2s ease;
+  cursor: pointer;}
+#guessBtn:active,
+#restartBtn:active {
+  transform: scale(0.96);} 
 </style>
 </head>
 <body>
